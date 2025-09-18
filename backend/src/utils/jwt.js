@@ -1,0 +1,31 @@
+import jwt from 'jsonwebtoken';
+
+export const generateToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE
+  });
+};
+
+export const verifyToken = (token) => {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    return null;
+  }
+};
+
+export const generateVerificationToken = () => {
+  return jwt.sign(
+    { purpose: 'email_verification' },
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+};
+
+export const generateResetToken = () => {
+  return jwt.sign(
+    { purpose: 'password_reset' },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+};
